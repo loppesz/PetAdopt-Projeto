@@ -81,7 +81,7 @@ O banco usado pela aplicação fica em `instance/petadopt.db` (ou no endereço d
 
 ### 5. Popular dados de exemplo
 
-Opcionalmente, execute:
+Como o banco não vem mais no repositório, um clone novo começa sem dados. Para ter os usuários, ONGs e pets de demonstração, execute:
 
 ```powershell
 python seed.py
