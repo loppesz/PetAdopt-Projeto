@@ -60,7 +60,16 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 3. Iniciar a aplicação
+### 3. Configurar as variáveis de ambiente
+
+```powershell
+Copy-Item .env.example .env
+python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+Cole a chave gerada em `SECRET_KEY` no arquivo `.env`. O `.env` fica apenas na sua máquina e não é versionado.
+
+### 4. Iniciar a aplicação
 
 ```powershell
 python app.py
@@ -68,9 +77,9 @@ python app.py
 
 Acesse `http://127.0.0.1:5000` no navegador.
 
-O banco usado pela aplicação fica em `instance/petadopt.db`.
+O banco usado pela aplicação fica em `instance/petadopt.db` (ou no endereço definido em `DATABASE_URL`). Ele é criado localmente e não é enviado ao GitHub.
 
-### 4. Popular dados de exemplo
+### 5. Popular dados de exemplo
 
 Opcionalmente, execute:
 
@@ -131,8 +140,9 @@ ProjetoExt/
 |-- requirements.txt        # Dependências Python
 |-- seed.py                 # Carga demonstrativa de dados
 |-- petadopt_schema.sql     # Referência histórica de schema SQL
+|-- .env.example            # Modelo das variáveis de ambiente (copie para .env)
 |-- instance/
-|   `-- petadopt.db         # Banco SQLite usado pela aplicação
+|   `-- petadopt.db         # Banco SQLite local (não versionado)
 |-- templates/              # Templates Jinja2/HTML
 |-- static/
 |   |-- css/                # Estilos das páginas
@@ -160,7 +170,8 @@ O arquivo `petadopt_schema.sql` funciona como referência histórica do modelo, 
 
 - O projeto foi configurado para execução local em contexto acadêmico.
 - A aplicação utiliza `debug=True` durante o desenvolvimento e apresentação.
-- A chave secreta está fixa no código para simplificar a execução local.
+- A chave secreta e a conexão com o banco são lidas do arquivo `.env`. Sem `SECRET_KEY`, uma chave temporária é gerada a cada execução e as sessões expiram ao reiniciar.
+- O banco (`instance/`), o `.env` e os uploads não são versionados (veja `.gitignore`).
 - Os uploads aceitam PNG, JPG, JPEG e WebP, com limite total de 16 MB por requisição.
 - O diretório `static/uploads/` contém arquivos gerados durante o uso da aplicação.
 

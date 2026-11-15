@@ -1,0 +1,29 @@
+# Banco de dados local (pode conter dados sensíveis)
+instance/
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Variáveis de ambiente / segredos
+.env
+.env.*
+!.env.example
+.flaskenv
+
+# Arquivos enviados pelos usuários
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db

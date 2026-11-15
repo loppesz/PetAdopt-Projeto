@@ -4,16 +4,23 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
 import os
+import secrets
 import time
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'petadopt-2026'
-
-# Configurar caminho do banco de dados
 base_dir = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(base_dir, 'instance', 'petadopt.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+load_dotenv(os.path.join(base_dir, '.env'))
+
+app = Flask(__name__)
+# Sem SECRET_KEY no .env, gera uma chave temporária (as sessões expiram ao reiniciar)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
+
+# Configurar caminho do banco de dados (padrão: SQLite local em instance/)
+instance_dir = os.path.join(base_dir, 'instance')
+os.makedirs(instance_dir, exist_ok=True)
+db_path = os.path.join(instance_dir, 'petadopt.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
